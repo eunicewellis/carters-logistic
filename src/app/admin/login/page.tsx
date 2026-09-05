@@ -105,7 +105,7 @@ export default function AdminLoginPage() {
 
         <div className="mt-4 flex items-center justify-center gap-2 text-xs text-brand-300">
           <ShieldCheck className="h-3.5 w-3.5" />
-          Demo credentials: admin / admin123
+          Authorized personnel only
         </div>
       </div>
     </div>

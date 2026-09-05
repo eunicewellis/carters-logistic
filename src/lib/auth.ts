@@ -1,57 +1,52 @@
 import crypto from "crypto";
 import { cookies } from "next/headers";
-import { getAuthData, saveAuthData } from "./store";
 
 const COOKIE_NAME = "cl_admin_session";
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
 
-function hashPassword(password: string, salt: string): string {
-  return crypto.scryptSync(password, salt, 32).toString("hex");
-}
-
-async function ensureAdminConfigured() {
-  const auth = await getAuthData();
-  if (!auth.salt || !auth.secret) {
-    auth.salt = crypto.randomBytes(16).toString("hex");
-    auth.secret = crypto.randomBytes(32).toString("hex");
-    auth.passwordHash = hashPassword(
-      process.env.ADMIN_PASSWORD || "admin123",
-      auth.salt
-    );
-    await saveAuthData(auth);
-  }
-  return auth;
-}
+// Stateless auth configuration — reads credentials from environment variables
+// so it works on serverless platforms (e.g. Vercel) where the filesystem is
+// read-only and no database is available.
+const DEFAULT_USERNAME = "admin";
+const DEFAULT_PASSWORD = "admin123";
+const DEFAULT_SECRET = "carters-logistics-change-this-secret";
 
 export function getAdminUsername(): string {
-  return process.env.ADMIN_USERNAME || "admin";
+  return process.env.ADMIN_USERNAME || DEFAULT_USERNAME;
+}
+
+function getAdminPassword(): string {
+  return process.env.ADMIN_PASSWORD || DEFAULT_PASSWORD;
+}
+
+function getSecret(): string {
+  return process.env.ADMIN_SECRET || DEFAULT_SECRET;
 }
 
 export async function verifyAdmin(password: string): Promise<boolean> {
-  const auth = await ensureAdminConfigured();
-  const hash = hashPassword(password, auth.salt);
-  return crypto.timingSafeEqual(
-    Buffer.from(hash, "hex"),
-    Buffer.from(auth.passwordHash, "hex")
-  );
+  const a = Buffer.from(password);
+  const b = Buffer.from(getAdminPassword());
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
 }
 
-function sign(payloadB64: string, secret: string): string {
-  return crypto.createHmac("sha256", secret).update(payloadB64).digest("hex");
+function sign(payloadB64: string): string {
+  return crypto
+    .createHmac("sha256", getSecret())
+    .update(payloadB64)
+    .digest("hex");
 }
 
 export async function createSessionToken(): Promise<string> {
-  const auth = await ensureAdminConfigured();
   const payload = JSON.stringify({ exp: Date.now() + SESSION_TTL_MS });
   const payloadB64 = Buffer.from(payload, "utf-8").toString("base64url");
-  return `${payloadB64}.${sign(payloadB64, auth.secret)}`;
+  return `${payloadB64}.${sign(payloadB64)}`;
 }
 
 export async function verifySessionToken(token: string): Promise<boolean> {
-  const auth = await ensureAdminConfigured();
   const [payloadB64, sig] = token.split(".");
   if (!payloadB64 || !sig) return false;
-  const expected = sign(payloadB64, auth.secret);
+  const expected = sign(payloadB64);
   if (
     expected.length !== sig.length ||
     !crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(sig))
@@ -87,3 +82,4 @@ export async function setSessionCookie(token: string): Promise<void> {
 export async function clearSessionCookie(): Promise<void> {
   cookies().delete(COOKIE_NAME);
 }
+

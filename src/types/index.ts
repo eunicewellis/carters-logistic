@@ -43,9 +43,3 @@ export interface SiteSettings {
   trackingSubtitle: string;
   statusSteps: StatusStep[];
 }
-
-export interface AuthData {
-  salt: string;
-  passwordHash: string;
-  secret: string;
-}

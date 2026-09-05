@@ -1,10 +1,9 @@
 import { readJson, writeJson } from "./db";
 import { seedIfEmpty } from "./seed";
-import type { AuthData, Shipment, SiteSettings, StatusStep } from "@/types";
+import type { Shipment, SiteSettings, StatusStep } from "@/types";
 
 const SHIPMENTS_FILE = "shipments.json";
 const SETTINGS_FILE = "settings.json";
-const AUTH_FILE = "auth.json";
 
 export const DEFAULT_STATUS_STEPS: StatusStep[] = [
   { key: "order_created", label: "Order Created" },
@@ -51,18 +50,4 @@ export async function getSettings(): Promise<SiteSettings> {
 
 export async function saveSettings(settings: SiteSettings): Promise<void> {
   await writeJson(SETTINGS_FILE, settings);
-}
-
-// ---------- Auth ----------
-
-export async function getAuthData(): Promise<AuthData> {
-  return readJson<AuthData>(AUTH_FILE, {
-    salt: "",
-    passwordHash: "",
-    secret: "",
-  });
-}
-
-export async function saveAuthData(data: AuthData): Promise<void> {
-  await writeJson(AUTH_FILE, data);
 }
