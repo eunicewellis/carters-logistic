@@ -36,16 +36,25 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 };
 
 async function pgGet<T>(key: string): Promise<T | null> {
-  await ensureSchema();
-  const { rows } = await sql`SELECT value FROM app_data WHERE key = ${key}`;
-  return (rows[0]?.value as T | undefined) ?? null;
+  try {
+    await ensureSchema();
+    const { rows } = await sql`SELECT value FROM app_data WHERE key = ${key}`;
+    return (rows[0]?.value as T | undefined) ?? null;
+  } catch (err) {
+    console.error("[store] Postgres read failed:", err);
+    return null;
+  }
 }
 
 async function pgSet(key: string, value: unknown): Promise<void> {
-  await ensureSchema();
-  await sql`INSERT INTO app_data (key, value) VALUES (${key}, ${
-    JSON.stringify(value) as unknown as never
-  }::jsonb) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`;
+  try {
+    await ensureSchema();
+    await sql`INSERT INTO app_data (key, value) VALUES (${key}, ${
+      JSON.stringify(value) as unknown as never
+    }::jsonb) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`;
+  } catch (err) {
+    console.error("[store] Postgres write failed:", err);
+  }
 }
 
 // ---------- Shipments ----------

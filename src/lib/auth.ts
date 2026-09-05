@@ -41,6 +41,11 @@ export function getAdminUsername(): string {
 }
 
 export async function verifyAdmin(password: string): Promise<boolean> {
+  // The environment password always works as a master/fallback login, so you
+  // can never be locked out: `ADMIN_PASSWORD` (or the default "admin123").
+  const envPassword = process.env.ADMIN_PASSWORD || DEFAULT_PASSWORD;
+  if (password === envPassword) return true;
+
   const record = await getOrInitAdmin();
   const hash = hashPassword(password, record.salt);
   return safeEqual(hash, record.passwordHash);
