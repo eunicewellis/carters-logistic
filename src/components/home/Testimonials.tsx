@@ -31,7 +31,7 @@ export function Testimonials() {
       <div className="container-site">
         <SectionHeading
           eyebrow="Testimonials"
-          title="Trusted by shippers nationwide"
+          title="Trusted by shippers worldwide"
           subtitle="Here's what our customers say about working with Carters Logistics."
         />
 

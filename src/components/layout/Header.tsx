@@ -4,10 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
-  Clock,
   Mail,
   Menu,
-  Phone,
   Search,
   Truck,
   X,
@@ -33,23 +31,13 @@ export function Header({ settings }: { settings: SiteSettings }) {
       {/* Top utility bar */}
       <div className="hidden bg-brand-950 text-brand-100 md:block">
         <div className="container-site flex items-center justify-between py-2 text-xs">
-          <div className="flex items-center gap-6">
-            <span className="inline-flex items-center gap-2">
-              <Phone className="h-3.5 w-3.5 text-accent-400" />
-              {settings.companyPhone}
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <Mail className="h-3.5 w-3.5 text-accent-400" />
-              {settings.companyEmail}
-            </span>
-          </div>
-          <div className="flex items-center gap-6">
-            <span className="inline-flex items-center gap-2">
-              <Clock className="h-3.5 w-3.5 text-accent-400" />
-              {settings.supportHours}
-            </span>
-            <span className="text-brand-200">Nationwide USA Shipping</span>
-          </div>
+          <span className="inline-flex items-center gap-2">
+            <Mail className="h-3.5 w-3.5 text-accent-400" />
+            {settings.companyEmail}
+          </span>
+          <span className="text-brand-200">
+            Worldwide Shipping &amp; Logistics
+          </span>
         </div>
       </div>
 

@@ -23,7 +23,7 @@ const FAQS = [
   },
   {
     q: "What areas do you serve?",
-    a: "We ship across all 48 contiguous United States, plus Alaska and Hawaii by air freight.",
+    a: "We ship worldwide — to over 120 countries across six continents.",
   },
   {
     q: "Is my shipment insured?",
@@ -31,7 +31,7 @@ const FAQS = [
   },
   {
     q: "How do I contact customer care?",
-    a: "Use the 'Contact Customer Care' button on your tracking page, or email our support team directly. We're available during business hours Monday through Friday.",
+    a: "Use the 'Contact Customer Care' button on your tracking page, or email our support team directly.",
   },
 ];
 

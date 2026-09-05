@@ -77,39 +77,6 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
               onChange={(e) => update("companyEmail", e.target.value)}
             />
           </div>
-          <div>
-            <label className="label" htmlFor="companyPhone">
-              Phone number
-            </label>
-            <input
-              id="companyPhone"
-              className="input"
-              value={form.companyPhone}
-              onChange={(e) => update("companyPhone", e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="label" htmlFor="supportHours">
-              Support hours
-            </label>
-            <input
-              id="supportHours"
-              className="input"
-              value={form.supportHours}
-              onChange={(e) => update("supportHours", e.target.value)}
-            />
-          </div>
-          <div className="md:col-span-2">
-            <label className="label" htmlFor="companyAddress">
-              Company address
-            </label>
-            <input
-              id="companyAddress"
-              className="input"
-              value={form.companyAddress}
-              onChange={(e) => update("companyAddress", e.target.value)}
-            />
-          </div>
         </div>
       </div>
 

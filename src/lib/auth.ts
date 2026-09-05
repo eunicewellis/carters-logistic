@@ -1,33 +1,71 @@
 import crypto from "crypto";
 import { cookies } from "next/headers";
+import { getAdminRecord, saveAdminRecord } from "./store";
 
 const COOKIE_NAME = "cl_admin_session";
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
 
-// Stateless auth configuration — reads credentials from environment variables
-// so it works on serverless platforms (e.g. Vercel) where the filesystem is
-// read-only and no database is available.
 const DEFAULT_USERNAME = "admin";
 const DEFAULT_PASSWORD = "admin123";
 const DEFAULT_SECRET = "carters-logistics-change-this-secret";
+
+function hashPassword(password: string, salt: string): string {
+  return crypto.scryptSync(password, salt, 32).toString("hex");
+}
+
+function safeEqual(a: string, b: string): boolean {
+  const ba = Buffer.from(a, "hex");
+  const bb = Buffer.from(b, "hex");
+  if (ba.length !== bb.length) return false;
+  return crypto.timingSafeEqual(ba, bb);
+}
+
+async function getOrInitAdmin() {
+  const existing = await getAdminRecord().catch(() => null);
+  if (existing && existing.salt && existing.passwordHash) return existing;
+
+  const salt = crypto.randomBytes(16).toString("hex");
+  const record = {
+    salt,
+    passwordHash: hashPassword(
+      process.env.ADMIN_PASSWORD || DEFAULT_PASSWORD,
+      salt
+    ),
+  };
+  await saveAdminRecord(record).catch(() => {});
+  return record;
+}
 
 export function getAdminUsername(): string {
   return process.env.ADMIN_USERNAME || DEFAULT_USERNAME;
 }
 
-function getAdminPassword(): string {
-  return process.env.ADMIN_PASSWORD || DEFAULT_PASSWORD;
+export async function verifyAdmin(password: string): Promise<boolean> {
+  const record = await getOrInitAdmin();
+  const hash = hashPassword(password, record.salt);
+  return safeEqual(hash, record.passwordHash);
+}
+
+export async function changeAdminPassword(
+  currentPassword: string,
+  newPassword: string
+): Promise<{ ok: boolean; error?: string }> {
+  const record = await getOrInitAdmin();
+  const currentHash = hashPassword(currentPassword, record.salt);
+  if (!safeEqual(currentHash, record.passwordHash)) {
+    return { ok: false, error: "Current password is incorrect." };
+  }
+
+  const salt = crypto.randomBytes(16).toString("hex");
+  await saveAdminRecord({
+    salt,
+    passwordHash: hashPassword(newPassword, salt),
+  });
+  return { ok: true };
 }
 
 function getSecret(): string {
   return process.env.ADMIN_SECRET || DEFAULT_SECRET;
-}
-
-export async function verifyAdmin(password: string): Promise<boolean> {
-  const a = Buffer.from(password);
-  const b = Buffer.from(getAdminPassword());
-  if (a.length !== b.length) return false;
-  return crypto.timingSafeEqual(a, b);
 }
 
 function sign(payloadB64: string): string {
@@ -82,4 +120,5 @@ export async function setSessionCookie(token: string): Promise<void> {
 export async function clearSessionCookie(): Promise<void> {
   cookies().delete(COOKIE_NAME);
 }
+
 

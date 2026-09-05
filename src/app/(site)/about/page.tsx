@@ -9,7 +9,7 @@ import { getSettings } from "@/lib/store";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn about Carters Logistics — our mission, values, and commitment to reliable USA shipping.",
+    "Learn about Carters Logistics — our mission, values, and commitment to reliable worldwide shipping.",
 };
 
 const VALUES = [
@@ -17,7 +17,7 @@ const VALUES = [
     icon: Target,
     title: "Our mission",
     description:
-      "To make shipping effortless and transparent for every home and business in America.",
+      "To make shipping effortless and transparent for every home and business around the world.",
   },
   {
     icon: HeartHandshake,
@@ -29,7 +29,7 @@ const VALUES = [
     icon: Truck,
     title: "Our reach",
     description:
-      "A nationwide network of carriers and warehouses covering all 48 contiguous states.",
+      "A global network of carriers and warehouses serving over 120 countries.",
   },
 ];
 
@@ -53,9 +53,9 @@ export default async function AboutPage() {
             />
             <div className="mt-5 space-y-4 text-base leading-relaxed text-slate-600">
               <p>
-                What started as a single delivery van in Dallas has grown into a
-                full-service logistics company serving the entire United
-                States. Today, Carters Logistics handles everything from
+                What started as a single delivery van has grown into a
+                full-service logistics company serving customers worldwide.
+                Today, Carters Logistics handles everything from
                 individual consignments to full truckload freight.
               </p>
               <p>
@@ -66,7 +66,7 @@ export default async function AboutPage() {
               </p>
               <p>
                 Whether you&apos;re a boutique owner sending handcrafted goods or a
-                business moving freight coast to coast, you&apos;ll get the same
+                business moving freight across borders, you&apos;ll get the same
                 careful, dependable service every time.
               </p>
             </div>

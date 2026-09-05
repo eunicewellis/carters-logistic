@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Mail, PackageSearch } from "lucide-react";
 import { PageHero } from "@/components/shared/PageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { getSettings } from "@/lib/store";
@@ -14,28 +14,16 @@ export default async function ContactPage() {
   const settings = await getSettings();
   const cards = [
     {
-      icon: Phone,
-      title: "Call us",
-      lines: [settings.companyPhone],
-      href: `tel:${settings.companyPhone.replace(/[^+\d]/g, "")}`,
-    },
-    {
       icon: Mail,
       title: "Email us",
       lines: [settings.companyEmail],
       href: `mailto:${settings.companyEmail}`,
     },
     {
-      icon: MapPin,
-      title: "Visit us",
-      lines: [settings.companyAddress],
-      href: undefined,
-    },
-    {
-      icon: Clock,
-      title: "Support hours",
-      lines: [settings.supportHours],
-      href: undefined,
+      icon: PackageSearch,
+      title: "Track a shipment",
+      lines: ["Enter your tracking number to see its latest status."],
+      href: "/track",
     },
   ];
 

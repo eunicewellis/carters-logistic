@@ -21,7 +21,7 @@ export function Hero() {
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-brand-100">
             <BadgeCheck className="h-4 w-4 text-accent-400" />
-            USA-Based Consignment &amp; Freight Company
+            Worldwide Consignment &amp; Freight Company
           </span>
 
           <h1 className="mt-5 font-display text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
@@ -34,7 +34,7 @@ export function Hero() {
 
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-brand-200">
             Carters Logistics delivers consignments, freight, and packages
-            across the United States with real-time tracking and dedicated
+            around the world with real-time tracking and dedicated
             customer care — every step of the way.
           </p>
 
@@ -57,7 +57,7 @@ export function Hero() {
             </span>
             <span className="inline-flex items-center gap-2">
               <Truck className="h-4 w-4 text-accent-400" />
-              Nationwide coverage
+              Global coverage
             </span>
           </div>
 
@@ -98,13 +98,13 @@ export function Hero() {
                 <div className="flex-1">
                   <p className="text-xs text-slate-400">From</p>
                   <p className="text-sm font-semibold text-slate-700">
-                    Dallas, TX
+                    Shanghai, CN
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs text-slate-400">To</p>
                   <p className="text-sm font-semibold text-slate-700">
-                    Austin, TX
+                    London, UK
                   </p>
                 </div>
               </div>

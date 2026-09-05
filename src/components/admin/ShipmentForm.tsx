@@ -22,6 +22,7 @@ export function ShipmentForm({
     productName: shipment?.productName ?? "",
     productImageUrl: "",
     recipientName: shipment?.recipientName ?? "",
+    clientEmail: shipment?.clientEmail ?? "",
     origin: shipment?.origin ?? "",
     destinationAddress: shipment?.destinationAddress ?? "",
     destinationCity: shipment?.destinationCity ?? "",
@@ -82,6 +83,7 @@ export function ShipmentForm({
       }
       if (clearImage) fd.append("clearImage", "1");
       fd.append("recipientName", form.recipientName);
+      fd.append("clientEmail", form.clientEmail);
       fd.append("origin", form.origin);
       fd.append("destinationAddress", form.destinationAddress);
       fd.append("destinationCity", form.destinationCity);
@@ -207,13 +209,24 @@ export function ShipmentForm({
               value={form.recipientName}
               onChange={(e) => update("recipientName", e.target.value)}
             />
+            <label className="label mt-4" htmlFor="clientEmail">
+              Client email (receives tracking number)
+            </label>
+            <input
+              id="clientEmail"
+              type="email"
+              className="input"
+              placeholder="client@example.com"
+              value={form.clientEmail}
+              onChange={(e) => update("clientEmail", e.target.value)}
+            />
             <label className="label mt-4" htmlFor="origin">
               Origin
             </label>
             <input
               id="origin"
               className="input"
-              placeholder="e.g. Dallas, TX"
+              placeholder="e.g. Shanghai, China"
               value={form.origin}
               onChange={(e) => update("origin", e.target.value)}
             />
@@ -318,7 +331,7 @@ export function ShipmentForm({
               onChange={(e) => update("statusLabel", e.target.value)}
             />
             <p className="mt-1.5 text-xs text-slate-400">
-              Edit this text freely — e.g. &quot;In Transit&quot; or &quot;Arrived at Dallas
+              Edit this text freely — e.g. &quot;In Transit&quot; or &quot;Arrived at London
               hub&quot;.
             </p>
           </div>

@@ -1,6 +1,6 @@
 # Carters Logistics 🚚
 
-A complete, USA-based **consignment & logistics** website with real-time shipment
+A complete, worldwide **consignment & logistics** website with real-time shipment
 tracking and a full admin dashboard. Built with **Next.js 14 (App Router)**,
 **TypeScript**, and **Tailwind CSS**.
 
@@ -53,27 +53,28 @@ ADMIN_SECRET=change-me-to-a-long-random-string
 > **Admin login:** username `admin`, password `admin123` by default. Change these
 > before going live by setting `ADMIN_USERNAME` and `ADMIN_PASSWORD`.
 
-## Deploying to Vercel (important)
+## Deploying to Vercel
 
-On Vercel the filesystem is **read-only and ephemeral**, so the local JSON file store
-(`data/*.json`) and `public/uploads/` **will not persist** — shipments you create,
-settings you change, and images you upload would be lost or fail.
+The app is fully wired for production. In **Vercel → Project Settings → Environment
+Variables**, add these (the code auto-detects them and falls back to local JSON/files in
+development):
 
-To make the admin dashboard, tracking, and image uploads fully work in production,
-connect a database and blob storage and set these env vars (the data helpers live in
-`src/lib/db.ts`):
+- `POSTGRES_URL` — Vercel Postgres (or Neon). Stores shipments, settings, and the admin password.
+- `BLOB_READ_WRITE_TOKEN` — Vercel Blob. Stores uploaded product images.
+- `RESEND_API_KEY` + `EMAIL_FROM` — Resend. Sends the tracking number to the client's email automatically.
+- `NEXT_PUBLIC_SITE_URL` — your public domain (e.g. `https://carterslogistic.com`), used in emails.
+- `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_SECRET` — admin login.
 
-- `POSTGRES_URL` (Vercel Postgres / Neon) — for shipments + settings
-- `BLOB_READ_WRITE_TOKEN` (Vercel Blob) — for uploaded product images
+Without these variables the app still runs locally (JSON files + on-disk uploads), so
+you can develop and preview everything before connecting services.
 
-The admin **login** is already stateless (env-var based), so it works on Vercel as-is.
+## How data is stored
 
-## How data is stored (local development)
+- **Production (Vercel):** Postgres (shipments, settings, admin password) + Vercel Blob (images).
+- **Local development:** JSON files under `data/` + images under `public/uploads/`.
 
-For local development, data is persisted as JSON files under the `data/` directory
-(shipments and settings), and uploaded product images are stored in `public/uploads/`.
-This keeps the app zero-config. For production, swap the helpers in `src/lib/db.ts` for
-a real database (Postgres, etc.).
+The data layer lives in `src/lib/store.ts` (Postgres ↔ JSON switch) and
+`src/lib/uploads.ts` (Blob ↔ disk switch).
 
 
 ## Tech stack

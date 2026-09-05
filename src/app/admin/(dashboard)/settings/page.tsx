@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SettingsForm } from "@/components/admin/SettingsForm";
+import { PasswordForm } from "@/components/admin/PasswordForm";
 import { getSettings } from "@/lib/store";
 
 export const metadata: Metadata = {
@@ -19,6 +20,10 @@ export default async function SettingsPage() {
 
       <div className="mt-6">
         <SettingsForm initial={settings} />
+      </div>
+
+      <div className="mt-8">
+        <PasswordForm />
       </div>
     </div>
   );

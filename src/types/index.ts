@@ -11,8 +11,9 @@ export interface Shipment {
   id: string;
   trackingNumber: string;
   productName: string;
-  productImage: string | null; // path (e.g. /uploads/...) or full URL
+  productImage: string | null; // path (e.g. /api/uploads/...) or full URL
   recipientName: string;
+  clientEmail?: string;
   origin: string;
   destinationAddress: string;
   destinationCity: string;
@@ -35,11 +36,14 @@ export interface StatusStep {
 export interface SiteSettings {
   companyName: string;
   companyEmail: string;
-  companyPhone: string;
-  companyAddress: string;
-  supportHours: string;
   contactCtaText: string;
   trackingTitle: string;
   trackingSubtitle: string;
   statusSteps: StatusStep[];
 }
+
+export interface AdminRecord {
+  salt: string;
+  passwordHash: string;
+}
+

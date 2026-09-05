@@ -1,11 +1,5 @@
 import Link from "next/link";
-import {
-  Clock,
-  Mail,
-  MapPin,
-  Phone,
-  Truck,
-} from "lucide-react";
+import { Mail, Truck } from "lucide-react";
 import { NewsletterForm } from "./NewsletterForm";
 import type { SiteSettings } from "@/types";
 
@@ -42,8 +36,8 @@ export function Footer({ settings }: { settings: SiteSettings }) {
             </span>
           </Link>
           <p className="mt-4 text-sm leading-relaxed text-brand-300">
-            A USA-based consignment and freight company delivering reliable,
-            transparent shipping for homes and businesses coast to coast.
+            A worldwide consignment and freight company delivering reliable,
+            transparent shipping for homes and businesses around the globe.
           </p>
           <div className="mt-5">
             <p className="mb-2 text-sm font-semibold text-white">
@@ -97,19 +91,6 @@ export function Footer({ settings }: { settings: SiteSettings }) {
             Contact Us
           </h3>
           <ul className="mt-4 space-y-3 text-sm">
-            <li className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent-400" />
-              <span className="text-brand-300">{settings.companyAddress}</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <Phone className="h-4 w-4 shrink-0 text-accent-400" />
-              <a
-                href={`tel:${settings.companyPhone.replace(/[^+\d]/g, "")}`}
-                className="text-brand-300 transition hover:text-accent-400"
-              >
-                {settings.companyPhone}
-              </a>
-            </li>
             <li className="flex items-center gap-3">
               <Mail className="h-4 w-4 shrink-0 text-accent-400" />
               <a
@@ -118,10 +99,6 @@ export function Footer({ settings }: { settings: SiteSettings }) {
               >
                 {settings.companyEmail}
               </a>
-            </li>
-            <li className="flex items-center gap-3">
-              <Clock className="h-4 w-4 shrink-0 text-accent-400" />
-              <span className="text-brand-300">{settings.supportHours}</span>
             </li>
           </ul>
         </div>

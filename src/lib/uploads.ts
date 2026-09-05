@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import crypto from "crypto";
+import { put } from "@vercel/blob";
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
@@ -14,17 +15,33 @@ export function isFile(value: unknown): value is File {
   );
 }
 
+function extFromType(type: string): string {
+  const t = type.toLowerCase();
+  if (t.includes("png")) return "png";
+  if (t.includes("webp")) return "webp";
+  if (t.includes("gif")) return "gif";
+  if (t.includes("svg")) return "svg";
+  return "jpg";
+}
+
 export async function saveUploadedImage(file: File): Promise<string> {
+  const type = (file.type || "").toLowerCase();
+  const ext = extFromType(type);
+  const name = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}.${ext}`;
+
+  // Production (Vercel): store in Vercel Blob.
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const blob = await put(`uploads/${name}`, file, {
+      access: "public",
+      contentType: file.type || "image/jpeg",
+    });
+    return blob.url;
+  }
+
+  // Local development: store on disk and serve via the API route.
   await fs.mkdir(UPLOAD_DIR, { recursive: true });
   const bytes = Buffer.from(await file.arrayBuffer());
-  const type = (file.type || "").toLowerCase();
-  let ext = "jpg";
-  if (type.includes("png")) ext = "png";
-  else if (type.includes("webp")) ext = "webp";
-  else if (type.includes("gif")) ext = "gif";
-  else if (type.includes("svg")) ext = "svg";
-  const name = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}.${ext}`;
   await fs.writeFile(path.join(UPLOAD_DIR, name), bytes);
-  // Serve through the API route so uploads work in both dev and `next start`.
   return `/api/uploads/${name}`;
 }
+

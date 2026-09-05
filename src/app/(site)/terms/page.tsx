@@ -21,7 +21,7 @@ export default function TermsPage() {
           </h2>
           <p className="mt-2 text-slate-600">
             Carters Logistics provides consignment, freight, and delivery
-            services within the United States, subject to availability and the
+            services worldwide, subject to availability and the
             terms agreed at booking.
           </p>
           <h2 className="mt-6 font-display text-xl font-bold text-brand-900">

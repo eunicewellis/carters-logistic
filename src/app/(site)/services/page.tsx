@@ -39,17 +39,28 @@ export default async function ServicesPage() {
               return (
                 <div
                   key={service.title}
-                  className="card p-8 transition-all duration-200 hover:-translate-y-1 hover:shadow-card-lg"
+                  className="card overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-card-lg"
                 >
-                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent-500 text-white shadow-card">
-                    <Icon className="h-7 w-7" />
-                  </span>
-                  <h2 className="mt-5 font-display text-xl font-semibold text-brand-900">
-                    {service.title}
-                  </h2>
-                  <p className="mt-3 text-sm leading-relaxed text-slate-500">
-                    {service.description}
-                  </p>
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                    <span className="absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl bg-accent-500 text-white shadow-card">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                  </div>
+                  <div className="p-6">
+                    <h2 className="font-display text-xl font-semibold text-brand-900">
+                      {service.title}
+                    </h2>
+                    <p className="mt-3 text-sm leading-relaxed text-slate-500">
+                      {service.description}
+                    </p>
+                  </div>
                 </div>
               );
             })}

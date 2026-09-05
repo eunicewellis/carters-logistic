@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { getShipments, saveShipments } from "@/lib/store";
 import { generateUniqueTrackingNumber } from "@/lib/tracking";
 import { isFile, saveUploadedImage } from "@/lib/uploads";
+import { sendTrackingEmail } from "@/lib/email";
 import type { Shipment, StatusCode } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -60,6 +61,7 @@ export async function POST(req: NextRequest) {
       productName,
       productImage,
       recipientName: String(formData.get("recipientName") ?? "").trim(),
+      clientEmail: String(formData.get("clientEmail") ?? "").trim() || undefined,
       origin: String(formData.get("origin") ?? "").trim(),
       destinationAddress: String(
         formData.get("destinationAddress") ?? ""
@@ -81,6 +83,13 @@ export async function POST(req: NextRequest) {
 
     shipments.unshift(shipment);
     await saveShipments(shipments);
+
+    // Send the tracking number to the client's email (non-blocking).
+    if (shipment.clientEmail) {
+      sendTrackingEmail(shipment.clientEmail, shipment).catch((err) =>
+        console.error("Failed to send tracking email:", err)
+      );
+    }
 
     return NextResponse.json({ shipment }, { status: 201 });
   } catch (err) {

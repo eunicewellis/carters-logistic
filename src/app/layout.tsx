@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s | Carters Logistics",
   },
   description:
-    "Carters Logistics is a USA-based consignment and freight company offering reliable shipping, warehousing, and real-time package tracking for individuals and businesses.",
+    "Carters Logistics is a worldwide consignment and freight company offering reliable shipping, warehousing, and real-time package tracking for individuals and businesses.",
   keywords: [
     "logistics",
     "shipping",
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     "package tracking",
     "freight",
     "Carters Logistics",
-    "USA",
+    "worldwide",
   ],
-  metadataBase: new URL("https://carterslogistics.com"),
+  metadataBase: new URL("https://carterslogistic.com"),
 };
 
 export default function RootLayout({

@@ -2,17 +2,20 @@
   "name": "carters-logistics",
   "version": "1.0.0",
   "private": true,
-  "description": "Carters Logistics — a USA-based consignment & logistics website with shipment tracking and an admin dashboard.",
+  "description": "Carters Logistics — a worldwide consignment & logistics website with shipment tracking and an admin dashboard.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
+    "@vercel/blob": "^2.8.0",
+    "@vercel/postgres": "^0.10.0",
     "lucide-react": "^0.427.0",
     "next": "^14.2.35",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "resend": "^6.26.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.10",

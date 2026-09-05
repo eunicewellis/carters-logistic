@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Phone } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
 import type { SiteSettings } from "@/types";
 
 export function CTABanner({ settings }: { settings: SiteSettings }) {
@@ -16,7 +16,7 @@ export function CTABanner({ settings }: { settings: SiteSettings }) {
               Ready to ship with confidence?
             </h2>
             <p className="mt-4 text-lg text-brand-200">
-              Get a free, no-obligation quote today — or call us to speak with a
+              Get a free, no-obligation quote today — or email us to speak with a
               logistics expert.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -25,11 +25,11 @@ export function CTABanner({ settings }: { settings: SiteSettings }) {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <a
-                href={`tel:${settings.companyPhone.replace(/[^+\d]/g, "")}`}
+                href={`mailto:${settings.companyEmail}`}
                 className="btn w-full bg-white/10 text-white hover:bg-white/20 sm:w-auto"
               >
-                <Phone className="h-4 w-4 text-accent-400" />
-                {settings.companyPhone}
+                <Mail className="h-4 w-4 text-accent-400" />
+                Email Us
               </a>
             </div>
           </div>

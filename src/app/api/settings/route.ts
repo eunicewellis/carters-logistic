@@ -16,9 +16,6 @@ export async function PUT(req: NextRequest) {
   const next: SiteSettings = {
     companyName: String(body.companyName ?? current.companyName),
     companyEmail: String(body.companyEmail ?? current.companyEmail),
-    companyPhone: String(body.companyPhone ?? current.companyPhone),
-    companyAddress: String(body.companyAddress ?? current.companyAddress),
-    supportHours: String(body.supportHours ?? current.supportHours),
     contactCtaText: String(body.contactCtaText ?? current.contactCtaText),
     trackingTitle: String(body.trackingTitle ?? current.trackingTitle),
     trackingSubtitle: String(body.trackingSubtitle ?? current.trackingSubtitle),
