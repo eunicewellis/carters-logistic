@@ -28,10 +28,15 @@ export async function saveUploadedImage(file: File): Promise<string> {
   const type = (file.type || "").toLowerCase();
   const ext = extFromType(type);
   const name = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}.${ext}`;
+  const bytes = Buffer.from(await file.arrayBuffer());
 
-  // Production (Vercel): store in Vercel Blob.
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const blob = await put(`uploads/${name}`, file, {
+  // Vercel Blob is configured via EITHER a read/write token (legacy) OR a
+  // store id + OIDC (new store model). Use Blob when either is present.
+  const useBlob = Boolean(
+    process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID
+  );
+  if (useBlob) {
+    const blob = await put(`uploads/${name}`, bytes, {
       access: "public",
       contentType: file.type || "image/jpeg",
     });
@@ -40,7 +45,6 @@ export async function saveUploadedImage(file: File): Promise<string> {
 
   // Local development: store on disk and serve via the API route.
   await fs.mkdir(UPLOAD_DIR, { recursive: true });
-  const bytes = Buffer.from(await file.arrayBuffer());
   await fs.writeFile(path.join(UPLOAD_DIR, name), bytes);
   return `/api/uploads/${name}`;
 }

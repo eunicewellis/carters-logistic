@@ -97,10 +97,11 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
     return NextResponse.json({ shipment: updated });
   } catch (err) {
     console.error("Failed to update shipment:", err);
-    return NextResponse.json(
-      { error: "Something went wrong while updating the shipment." },
-      { status: 500 }
-    );
+    const message =
+      err instanceof Error
+        ? err.message
+        : "Something went wrong while updating the shipment.";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

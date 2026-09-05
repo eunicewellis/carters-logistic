@@ -94,9 +94,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ shipment }, { status: 201 });
   } catch (err) {
     console.error("Failed to create shipment:", err);
-    return NextResponse.json(
-      { error: "Something went wrong while creating the shipment." },
-      { status: 500 }
-    );
+    const message =
+      err instanceof Error
+        ? err.message
+        : "Something went wrong while creating the shipment.";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
