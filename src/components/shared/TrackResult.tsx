@@ -5,6 +5,7 @@ import {
   Headset,
   MapPin,
   PackageCheck,
+  Send,
   User,
 } from "lucide-react";
 import { ProductImage } from "./ProductImage";
@@ -82,6 +83,17 @@ export function TrackResult({
                     <dt className="text-slate-400">Recipient</dt>
                     <dd className="font-medium text-slate-700">
                       {shipment.recipientName}
+                    </dd>
+                  </div>
+                </div>
+              )}
+              {shipment.senderName && (
+                <div className="flex items-start gap-2.5">
+                  <Send className="mt-0.5 h-4 w-4 shrink-0 text-accent-500" />
+                  <div>
+                    <dt className="text-slate-400">Sender</dt>
+                    <dd className="font-medium text-slate-700">
+                      {shipment.senderName}
                     </dd>
                   </div>
                 </div>

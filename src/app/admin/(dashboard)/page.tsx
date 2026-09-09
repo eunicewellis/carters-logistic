@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { getShipments } from "@/lib/store";
 import { formatDate } from "@/lib/utils";
+import { SuccessToast } from "@/components/admin/SuccessToast";
 import type { StatusCode } from "@/types";
 
 export const metadata: Metadata = {
@@ -23,7 +24,11 @@ const STATUS_BADGE: Record<StatusCode, string> = {
   delivered: "bg-green-50 text-green-600",
 };
 
-export default async function AdminDashboardPage() {
+export default async function AdminDashboardPage({
+  searchParams,
+}: {
+  searchParams: { created?: string; tracking?: string };
+}) {
   const shipments = await getShipments();
 
   const stats = [
@@ -56,6 +61,16 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
+      {searchParams?.created ? (
+        <SuccessToast
+          message={`Shipment created successfully${
+            searchParams.tracking
+              ? ` — tracking number ${searchParams.tracking}`
+              : ""
+          }.`}
+        />
+      ) : null}
+
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-display text-2xl font-bold text-brand-900">

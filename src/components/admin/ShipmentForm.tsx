@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { ImagePlus, Save } from "lucide-react";
+import { AlertCircle, ImagePlus, Save } from "lucide-react";
 import { ProductImage } from "@/components/shared/ProductImage";
 import type { Shipment, StatusCode, StatusStep } from "@/types";
 
@@ -23,6 +23,9 @@ export function ShipmentForm({
     productImageUrl: "",
     recipientName: shipment?.recipientName ?? "",
     clientEmail: shipment?.clientEmail ?? "",
+    senderName: shipment?.senderName ?? "",
+    senderEmail: shipment?.senderEmail ?? "",
+    senderAddress: shipment?.senderAddress ?? "",
     origin: shipment?.origin ?? "",
     destinationAddress: shipment?.destinationAddress ?? "",
     destinationCity: shipment?.destinationCity ?? "",
@@ -84,6 +87,9 @@ export function ShipmentForm({
       if (clearImage) fd.append("clearImage", "1");
       fd.append("recipientName", form.recipientName);
       fd.append("clientEmail", form.clientEmail);
+      fd.append("senderName", form.senderName);
+      fd.append("senderEmail", form.senderEmail);
+      fd.append("senderAddress", form.senderAddress);
       fd.append("origin", form.origin);
       fd.append("destinationAddress", form.destinationAddress);
       fd.append("destinationCity", form.destinationCity);
@@ -108,7 +114,15 @@ export function ShipmentForm({
         setError(data.error || "Something went wrong. Please try again.");
         return;
       }
-      router.push(`/admin/shipments/${data.shipment.id}`);
+      if (mode === "edit" && shipment) {
+        router.push(`/admin/shipments/${shipment.id}`);
+      } else {
+        router.push(
+          `/admin?created=1&tracking=${encodeURIComponent(
+            data.shipment.trackingNumber
+          )}`
+        );
+      }
       router.refresh();
     } catch {
       setError("Something went wrong. Please try again.");
@@ -120,9 +134,10 @@ export function ShipmentForm({
   return (
     <form onSubmit={submit}>
       {error && (
-        <p className="mb-5 rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
-          {error}
-        </p>
+        <div className="mb-5 flex items-start gap-2.5 rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          <p>{error}</p>
+        </div>
       )}
 
       {/* Product */}
@@ -229,6 +244,56 @@ export function ShipmentForm({
               placeholder="e.g. Shanghai, China"
               value={form.origin}
               onChange={(e) => update("origin", e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Sender */}
+      <div className="card mt-6 p-6">
+        <h2 className="font-display text-lg font-semibold text-brand-900">
+          Sender Information
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Optional — who is sending this package.
+        </p>
+        <div className="mt-5 grid gap-5 md:grid-cols-2">
+          <div>
+            <label className="label" htmlFor="senderName">
+              Sender name
+            </label>
+            <input
+              id="senderName"
+              className="input"
+              placeholder="e.g. Acme Imports Ltd."
+              value={form.senderName}
+              onChange={(e) => update("senderName", e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="label" htmlFor="senderEmail">
+              Sender email
+            </label>
+            <input
+              id="senderEmail"
+              type="email"
+              className="input"
+              placeholder="sender@example.com"
+              value={form.senderEmail}
+              onChange={(e) => update("senderEmail", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="label" htmlFor="senderAddress">
+              Sender address
+            </label>
+            <textarea
+              id="senderAddress"
+              rows={2}
+              className="input resize-none"
+              placeholder="Street, city, state, ZIP"
+              value={form.senderAddress}
+              onChange={(e) => update("senderAddress", e.target.value)}
             />
           </div>
         </div>

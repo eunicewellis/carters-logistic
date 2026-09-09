@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Mail, PackageSearch } from "lucide-react";
 import { PageHero } from "@/components/shared/PageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
+import { LiveChatButton } from "@/components/contact/LiveChatButton";
 import { getSettings } from "@/lib/store";
 
 export const metadata: Metadata = {
@@ -66,6 +67,7 @@ export default async function ContactPage() {
                   <div key={card.title}>{content}</div>
                 );
               })}
+              <LiveChatButton />
             </div>
           </div>
 

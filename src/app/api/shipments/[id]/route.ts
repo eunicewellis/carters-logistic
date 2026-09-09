@@ -73,6 +73,12 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
       clientEmail:
         String(formData.get("clientEmail") ?? "").trim() ||
         existing.clientEmail,
+      senderName:
+        String(formData.get("senderName") ?? "").trim() || undefined,
+      senderEmail:
+        String(formData.get("senderEmail") ?? "").trim() || undefined,
+      senderAddress:
+        String(formData.get("senderAddress") ?? "").trim() || undefined,
       origin: String(formData.get("origin") ?? "").trim(),
       destinationAddress: String(
         formData.get("destinationAddress") ?? ""

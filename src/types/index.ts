@@ -14,6 +14,9 @@ export interface Shipment {
   productImage: string | null; // path (e.g. /api/uploads/...) or full URL
   recipientName: string;
   clientEmail?: string;
+  senderName?: string;
+  senderEmail?: string;
+  senderAddress?: string;
   origin: string;
   destinationAddress: string;
   destinationCity: string;
