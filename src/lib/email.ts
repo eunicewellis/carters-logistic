@@ -88,7 +88,7 @@ export async function sendTrackingEmail(
     )
     .join("");
 
-  await resend.emails.send({
+  const result = await resend.emails.send({
     from: FROM,
     to,
     subject: `Your shipment is confirmed — tracking number ${shipment.trackingNumber}`,
@@ -113,6 +113,12 @@ export async function sendTrackingEmail(
       </div>
     `,
   });
+
+  if (result.error) {
+    const message = result.error?.message || "Unknown Resend error";
+    console.error(`[email] Failed to send to ${to}:`, message);
+    throw new Error(message);
+  }
 }
 
 export async function sendShipmentNotification(
@@ -137,7 +143,12 @@ export async function sendShipmentNotification(
     return true;
   });
 
-  await Promise.all(
+  const results = await Promise.allSettled(
     unique.map((t) => sendTrackingEmail(t.email, shipment, t.name))
   );
+  results.forEach((result) => {
+    if (result.status === "rejected") {
+      console.error("[email] Tracking email failed:", result.reason);
+    }
+  });
 }

@@ -10,6 +10,7 @@ import {
 import { getShipments } from "@/lib/store";
 import { formatDate } from "@/lib/utils";
 import { SuccessToast } from "@/components/admin/SuccessToast";
+import { DeleteButton } from "@/components/admin/DeleteButton";
 import type { StatusCode } from "@/types";
 
 export const metadata: Metadata = {
@@ -172,14 +173,17 @@ export default async function AdminDashboardPage({
                     <td className="px-5 py-4 text-slate-500">
                       {formatDate(shipment.createdAt)}
                     </td>
-                    <td className="px-5 py-4 text-right">
-                      <Link
-                        href={`/admin/shipments/${shipment.id}`}
-                        className="inline-flex items-center gap-1 text-sm font-semibold text-accent-600 hover:underline"
-                      >
-                        View / Edit
-                        <ArrowUpRight className="h-3.5 w-3.5" />
-                      </Link>
+                    <td className="px-5 py-4">
+                      <div className="flex items-center justify-end gap-2">
+                        <Link
+                          href={`/admin/shipments/${shipment.id}`}
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-accent-600 hover:underline"
+                        >
+                          View / Edit
+                          <ArrowUpRight className="h-3.5 w-3.5" />
+                        </Link>
+                        <DeleteButton id={shipment.id} compact />
+                      </div>
                     </td>
                   </tr>
                 ))}

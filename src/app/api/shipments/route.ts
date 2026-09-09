@@ -89,10 +89,14 @@ export async function POST(req: NextRequest) {
     shipments.unshift(shipment);
     await saveShipments(shipments);
 
-    // Send tracking details to the recipient and sender (non-blocking).
-    sendShipmentNotification(shipment).catch((err) =>
-      console.error("Failed to send tracking email:", err)
-    );
+    // Send tracking details to the recipient and sender. We await this because
+    // fire-and-forget promises can be terminated early on serverless hosts
+    // (e.g. Vercel) before the email is actually dispatched.
+    try {
+      await sendShipmentNotification(shipment);
+    } catch (err) {
+      console.error("Failed to send tracking email:", err);
+    }
 
     return NextResponse.json({ shipment }, { status: 201 });
   } catch (err) {
