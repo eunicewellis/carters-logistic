@@ -35,15 +35,17 @@ export async function readJson<T>(file: string, fallback: T): Promise<T> {
   }
 }
 
-export async function writeJson(file: string, data: unknown): Promise<void> {
+export async function writeJson(file: string, data: unknown): Promise<boolean> {
   await ensureDir();
   const filePath = path.join(DATA_DIR, file);
   const tmp = `${filePath}.${crypto.randomBytes(6).toString("hex")}.tmp`;
   try {
     await fs.writeFile(tmp, JSON.stringify(data, null, 2), "utf-8");
     await fs.rename(tmp, filePath);
+    return true;
   } catch (err) {
     console.error(`[store] Failed to write ${file}:`, err);
+    return false;
   }
 }
 

@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     "Track your Carters Logistics shipment in real time using your tracking number.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function TrackPage({
   searchParams,
 }: {

@@ -46,14 +46,16 @@ async function pgGet<T>(key: string): Promise<T | null> {
   }
 }
 
-async function pgSet(key: string, value: unknown): Promise<void> {
+async function pgSet(key: string, value: unknown): Promise<boolean> {
   try {
     await ensureSchema();
     await sql`INSERT INTO app_data (key, value) VALUES (${key}, ${
       JSON.stringify(value) as unknown as never
     }::jsonb) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`;
+    return true;
   } catch (err) {
     console.error("[store] Postgres write failed:", err);
+    return false;
   }
 }
 
@@ -69,11 +71,17 @@ export async function getShipments(): Promise<Shipment[]> {
 }
 
 export async function saveShipments(list: Shipment[]): Promise<void> {
+  let ok: boolean;
   if (hasPostgres()) {
-    await pgSet(KEY_SHIPMENTS, list);
-    return;
+    ok = await pgSet(KEY_SHIPMENTS, list);
+  } else {
+    ok = await writeJson(SHIPMENTS_FILE, list);
   }
-  await writeJson(SHIPMENTS_FILE, list);
+  if (!ok) {
+    throw new Error(
+      "Shipment could not be saved to storage. Check the server logs for '[store] Postgres write failed' and verify your database connection (POSTGRES_URL)."
+    );
+  }
 }
 
 // ---------- Settings ----------
