@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   title: "Dashboard",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const STATUS_BADGE: Record<StatusCode, string> = {
   order_created: "bg-slate-100 text-slate-600",
   picked_up: "bg-brand-50 text-brand-700",

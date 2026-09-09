@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Add Shipment",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function NewShipmentPage() {
   const settings = await getSettings();
   return (

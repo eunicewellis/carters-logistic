@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Settings",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function SettingsPage() {
   const settings = await getSettings();
   return (

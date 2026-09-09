@@ -87,14 +87,26 @@ export function TrackResult({
                   </div>
                 </div>
               )}
-              {shipment.senderName && (
+              {(shipment.senderName ||
+                shipment.senderEmail ||
+                shipment.senderAddress) && (
                 <div className="flex items-start gap-2.5">
                   <Send className="mt-0.5 h-4 w-4 shrink-0 text-accent-500" />
-                  <div>
+                  <div className="space-y-0.5">
                     <dt className="text-slate-400">Sender</dt>
-                    <dd className="font-medium text-slate-700">
-                      {shipment.senderName}
-                    </dd>
+                    {shipment.senderName && (
+                      <dd className="font-medium text-slate-700">
+                        {shipment.senderName}
+                      </dd>
+                    )}
+                    {shipment.senderEmail && (
+                      <dd className="text-slate-500">{shipment.senderEmail}</dd>
+                    )}
+                    {shipment.senderAddress && (
+                      <dd className="text-slate-500">
+                        {shipment.senderAddress}
+                      </dd>
+                    )}
                   </div>
                 </div>
               )}

@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "Edit Shipment",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function EditShipmentPage({
   params,
 }: {
